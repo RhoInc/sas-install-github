@@ -11,7 +11,7 @@ This repository contains SAS code for downloading and installing other SAS code 
 %violinPlot    
     (data = sashelp.cars 
     ,outcomeVar = mpg_city 
-    ,outPath = &path
+    ,outPath = C:\temp
     ,outName = violin_folder
     );
 
