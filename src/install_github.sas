@@ -50,21 +50,21 @@
     ----------  ------------------  --------------------------------------------------------------
     2016-11-03  Spencer Childress   Create.
     2017-06-24  Spencer Childress   Import all files, not just .sas files.
-    2018-10-03  Shane Rosanbalm     Remove savePath parameter. 
-                                    Update repo format from full URL to user/repo.
+    2018-10-03  Shane Rosanbalm     Remove save option. 
+                                    Shorten repo format from full URL to just user/repo.
                                     Switch to API approach for processing a folder.
 
 \------------------------------------------------------------------------------------------------*/
 
 %macro install_github
         (repo = 
-        ,folder = 
         ,file = 
+        ,folder = 
         );
 
 
-    %*---------- All files saved to temp. ----------;
-    %let savePath = %sysfunc(pathname(temp));
+    %*---------- All files saved to TEMP. ----------;
+    %let savePath = %sysfunc(pathname(TEMP));
 
 
     %*--------------------------------------------------------------------------------;
@@ -91,7 +91,7 @@
     
         
     %*--------------------------------------------------------------------------------;
-    %*---------- Either install a single file ----------;
+    %*---------- Either install a single file... ----------;
     %*--------------------------------------------------------------------------------;
     
     %if %nrbquote(&file) ne %then %do;
@@ -102,7 +102,7 @@
 
 
     %*--------------------------------------------------------------------------------;
-    %*---------- Or install an entire folder ----------;
+    %*---------- ...or install an entire folder. ----------;
     %*--------------------------------------------------------------------------------;
     
     %else %if %nrbquote(&folder) ne %then %do;
