@@ -9,8 +9,8 @@ This repository contains SAS code for downloading and installing other SAS code 
 Here is an example of installing a single-file macro using `%install_github`.
 
 ```
-*--- point to local copy of install_github ---;
-%include "H:\mylib\install_github.sas";
+*--- point to your local copy of install_github ---;
+%include "S:\Basestat\Autocall\install_github.sas";
 
 *--- install a single file from GitHub ---;
 %install_github
@@ -30,8 +30,8 @@ Here is an example of installing a single-file macro using `%install_github`.
 Here is an example of installing a multi-file macro using `%install_github`.
 
 ```
-*--- point to local copy of install_github ---;
-%include "H:\mylib\install_github.sas";
+*--- point to your local copy of install_github ---;
+%include "S:\Basestat\Autocall\install_github.sas";
 
 *--- install a folder full of files from GitHub ---;
 %install_github
