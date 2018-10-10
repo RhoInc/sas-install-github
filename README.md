@@ -1,6 +1,10 @@
 # sas-install-github
 
-This repository contains SAS code for downloading and installing other SAS code directly from GitHub. Gone will be the days of downloading ZIP files and writing %include statments. Simply point to the repository containing your SAS code and let %install_github take care of the rest.
+This repository contains SAS code for downloading and installing other SAS code directly from GitHub. 
+
+1. Manually download this repository.
+1. `%include` the `%install_github` macro into your SAS session.
+1. Never manually download or `%include` another GitHub repository for the rest of your SAS career!
 
 ```
 *--- install a single file ---;
@@ -8,6 +12,7 @@ This repository contains SAS code for downloading and installing other SAS code 
     (repo=RhoInc/sas-violinPlot
     ,file=src/violinPlot.sas
     )
+*--- use the newly-installed macro ---;
 %violinPlot    
     (data = sashelp.cars 
     ,outcomeVar = mpg_city 
@@ -21,6 +26,7 @@ This repository contains SAS code for downloading and installing other SAS code 
     (repo=RhoInc/sas-codebook
     ,folder=Macros
     )
+*--- use the newly-installed macro ---;
 %codebook_generic
     (data=sashelp.class
     ,pdfpath=C:\temp
