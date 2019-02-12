@@ -3,7 +3,7 @@
   Program:  install_github.sas
 
     Purpose:
-    
+
         Import file(s) from GitHub and install file(s) in SAS session (if .sas file).
 
   /-----------------------------------------------------------------------------------------------\
@@ -14,14 +14,14 @@
         repo
             - repository name in user/repo form
                 e.g., RhoInc/sas-violinPlot
-                
+
     EXACTLY ONE OF THE FOLLOWING                
         file
             - a single repository file, including containing folder(s)
                 e.g., src/violinPlot.sas
-                
+
         - OR -
-        
+
         folder
             - repository folder which contains files
                 e.g., src
@@ -31,16 +31,16 @@
   \-----------------------------------------------------------------------------------------------/
 
     Install a single file.
-        %install_github
-            (repo=RhoInc/sas-violinPlot
-            ,file=src/violinPlot.sas
-            )
-    
+        %install_github(
+            repo = RhoInc/sas-violinPlot,
+            file = src/violinPlot.sas
+        );
+
     Install a folder full of files.
-        %install_github
-            (repo=RhoInc/sas-codebook
-            ,folder=Macros
-            )
+        %install_github(
+            repo = RhoInc/sas-codebook,
+            folder = Macros
+        );
 
   /-------------------------------------------------------------------------------------------------\
     Program history:
@@ -56,23 +56,22 @@
 
 \------------------------------------------------------------------------------------------------*/
 
-%macro install_github
-        (repo = 
-        ,file = 
-        ,folder = 
-        );
+%macro install_github(
+    repo = ,
+    file = ,
+    folder = 
+);
 
 
     %*---------- All files saved to TEMP. ----------;
     %let savePath = %sysfunc(pathname(TEMP));
 
-
     %*--------------------------------------------------------------------------------;
     %*---------- Macro to install a single file from a GitHub repository. ----------;
     %*--------------------------------------------------------------------------------;
-    
-    %macro ig_file(file=);
-    
+
+    %macro ig_file(file = );
+
         %put;
         %put %str(NOTE-   --> Reading in &file from &repo..);
 
@@ -88,58 +87,51 @@
         %end;
 
     %mend ig_file;
-    
-        
+
     %*--------------------------------------------------------------------------------;
     %*---------- Either install a single file... ----------;
     %*--------------------------------------------------------------------------------;
-    
-    %if %nrbquote(&file) ne %then %do;
-    
-        %ig_file(file=&file)
-    
-    %end;
 
+    %if %nrbquote(&file) ne %then
+        %ig_file(file = &file);
 
     %*--------------------------------------------------------------------------------;
     %*---------- ...or install an entire folder. ----------;
     %*--------------------------------------------------------------------------------;
-    
+
     %else %if %nrbquote(&folder) ne %then %do;
 
         %put;
-        %put %str(NOTE-   --> Reading in all files in &folder from &repo..);
+        %put %str(NOTE-   --> Reading in all .sas files in &folder from &repo..);
 
         %let folderURL = https://api.github.com/repos/&repo/contents/&folder;
-        
+
         filename inFolder temp;
-        
+
             proc http
-                    url = "&folderURL"
-                    method = 'GET'
-                    out = inFolder
-                    ;
+                url = "&folderURL"
+                method = 'GET'
+                out = inFolder;
             run;
-            
+
             libname inFolder json fileref = inFolder;
-            
+
             data root;
                 set inFolder.root;
                 length extension $100 action $2000;
                 if type = "file" then do;
                     extension = scan(name, -1, '.');
                     if upcase(extension) = "SAS" then do;
-                        action = cats('%ig_file(file=',path,')');
+                        action = cats('%ig_file(file = ',path,');');
                         call execute(action);
                     end;
                 end;
             run;
-            
+
             libname inFolder;
-            
+
         filename inFolder;
-        
+
     %end;
-    
-    
-%mend  install_github;
+
+%mend install_github;
